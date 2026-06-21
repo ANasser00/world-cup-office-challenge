@@ -13,6 +13,12 @@
      reached R16 then lost ........... { stage: "R16",   out: true  }
      lifted the trophy ............... { stage: "WINNER", out: false }
 
+   >>> WHEN THE GROUP STAGE ENDS, do two things per team:
+       - team DID NOT qualify  ->  set  out: true   (leave stage "GROUP" = 0 pts)
+       - team ADVANCED         ->  set  stage: "R32" (out stays false)
+       Eliminated players drop into the "Out of the running" table on the page;
+       their score is locked except the top-scorer bonus added at the end.
+
    Points per stage: GROUP 0 · R32 3 · R16 6 · QF 9 · SF 13 · FINAL 17 · WINNER 22
 
    TOP SCORER GOALS — goals scored by each player (only matters at the END).

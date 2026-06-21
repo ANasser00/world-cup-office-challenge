@@ -26,6 +26,23 @@ Open `results.js`, change the numbers, **save, and refresh the page.**
    Add **any** player, not just the picked ones. The app finds the leader and the
    top 3 automatically; ties count for everyone tied.
 
+## When the group stage ends
+
+In `results.js`, for each team:
+- **Didn't qualify** → set `out: true` (leave `stage: "GROUP"` = 0 pts).
+- **Advanced** → set `stage: "R32"`.
+
+Eliminated players move into the **❌ Out of the running** table on the page. Their score
+is now **locked** — only the end-of-tournament top-scorer bonus can still change it.
+
+## Top scorer is pending until the end
+
+Top-scorer points are added at the very end, so until you enter goals every pick shows
+**⏳ pending**. The **⚽ Top scorer race** panel shows who's riding on which player (the
+swing — e.g. "Mbappé: 11 backers, +10/+5 each"). Once you fill in `topScorerGoals`,
+it resolves: **+10** for the Golden Boot, **+5** for a top-3 finish, and totals update.
+The `+?` tag on a total means a top-scorer bonus is still in play for that player.
+
 ## Scoring (from the challenge deck)
 
 `total = stage points + handicap bonus + top-scorer points`
