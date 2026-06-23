@@ -1,47 +1,62 @@
 # World Cup Office Challenge — Leaderboard
 
 A dead-simple leaderboard for the office game: pick a team + a top scorer, underdogs
-get a handicap, overperform to win. No backend, no install, no internet needed.
+get a handicap, overperform to win. No backend, no database, no API key.
 
 ## Use it
 
-**Double-click `index.html`** — it opens in your browser and shows the live standings.
-That's it. Want to share it? Put the folder on a shared drive, or push to GitHub and
-turn on GitHub Pages (free).
+**Double-click `index.html`** — it opens in your browser and shows the standings.
+To share with the office, push to GitHub and turn on **GitHub Pages** (free) — everyone
+gets a link, and only people with repo access can change the data.
 
-## Update standings (the only thing you'll touch: `results.js`)
+## Standings update automatically 🎉
 
-Open `results.js`, change the numbers, **save, and refresh the page.**
+The results (which teams advanced, who's out, goal scorers) are pulled from a free public
+dataset — [openfootball](https://github.com/openfootball/worldcup.json) — so **you don't
+have to keep score by hand.** There are three ways it refreshes, all running the same
+script (`scripts/update-results.js`), which rewrites `results.js`:
 
-1. **Teams** — for each team set how far it has reached and whether it's out:
-   ```js
-   "Ghana": { stage: "R16", out: false }   // reached round of 16, still alive
-   "Spain": { stage: "GROUP", out: true }  // knocked out in the groups
-   ```
-   `stage` is the **furthest stage reached** (drives the points):
-   `GROUP · R32 · R16 · QF · SF · FINAL · WINNER`.
-   `out: true` once a team is eliminated.
+| How | What to do | Good for |
+|---|---|---|
+| **Scheduled** | Nothing — the GitHub Action runs daily (midday Gulf time). | Set-and-forget |
+| **On demand** | Repo → **Actions** tab → *Update results* → **Run workflow**. | "Refresh now" |
+| **Locally** | `node scripts/update-results.js` (Node 18+, no install). | No GitHub / testing |
 
-2. **Top scorer goals** — fill in goals as they pile up (only matters at the end).
-   Add **any** player, not just the picked ones. The app finds the leader and the
-   top 3 automatically; ties count for everyone tied.
+Because everyone reads the same published `results.js`, there's effectively **one updater**
+(the schedule, or whoever has repo access) — a random viewer can't change the standings.
 
-## When the group stage ends
+> openfootball is community-maintained and refreshes roughly once a day, so this is
+> "updated daily," not second-by-second live. Perfect for a game that runs over weeks.
 
-In `results.js`, for each team:
-- **Didn't qualify** → set `out: true` (leave `stage: "GROUP"` = 0 pts).
-- **Advanced** → set `stage: "R32"`.
+### To enable the schedule (one-time)
+1. Push this folder to a GitHub repo.
+2. Settings → **Pages** → deploy from `main` branch (gets you the shareable link).
+3. Settings → **Actions** → **General** → allow workflows to read/write. That's it —
+   the daily job will keep `results.js` (and the live page) up to date.
+   Change the time in `.github/workflows/update-results.yml` (one cron line, in UTC).
 
-Eliminated players move into the **❌ Out of the running** table on the page. Their score
-is now **locked** — only the end-of-tournament top-scorer bonus can still change it.
+## Prefer to keep score manually?
 
-## Top scorer is pending until the end
+You can. Just edit `results.js` by hand and refresh — but note the scheduled job will
+overwrite it on its next run (pause the schedule if you want full manual control).
 
-Top-scorer points are added at the very end, so until you enter goals every pick shows
-**⏳ pending**. The **⚽ Top scorer race** panel shows who's riding on which player (the
-swing — e.g. "Mbappé: 11 backers, +10/+5 each"). Once you fill in `topScorerGoals`,
-it resolves: **+10** for the Golden Boot, **+5** for a top-3 finish, and totals update.
-The `+?` tag on a total means a top-scorer bonus is still in play for that player.
+- **Teams** — `"Ghana": { stage: "R16", out: false }`.
+  `stage` = furthest reached (`GROUP · R32 · R16 · QF · SF · FINAL · WINNER`),
+  `out: true` once eliminated.
+- **Top scorer goals** — `"Kylian Mbappé": 7`. Add any player; the app finds the
+  leader and top 3, ties included.
+
+## How the page reads
+
+- **Leaderboard** — everyone ranked. "Still in" / "Eliminated" tags; eliminated players
+  keep their points (still in the title race).
+- **🐎 Dark horses** — high-handicap teams still alive, the overperformers to watch
+  (the "Ghana is outstanding right now" view).
+- **⚽ Top scorer race** — top-scorer points only **lock at the end** of the tournament.
+  Until then it shows a **live projection** (🔥 "leading — +10 if it holds") so you can
+  see who *would* gain, without banking the points early. A `+?` on a total means a
+  top-scorer bonus is still in play.
+- **❌ Out of the running** — eliminated players with their locked score.
 
 ## Scoring (from the challenge deck)
 
@@ -57,19 +72,18 @@ The `+?` tag on a total means a top-scorer bonus is still in play for that playe
 | Final | 17 | | | |
 | Winner | 22 | | | |
 
-Top scorer: **+10** if your pick is the Golden Boot, **+5** for a top-3 finish.
+Top scorer: **+10** for the Golden Boot, **+5** for a top-3 finish (locked at the end).
 Winner = highest total; tie broken by closest guess to total tournament goals.
-
-The **Dark horses** panel highlights the high-handicap teams still alive — the
-overperformers to watch (the "Ghana is outstanding right now" view).
 
 ## Files
 
 | File | What it is |
 |---|---|
-| `index.html` | The page — UI, styling, scoring logic, fixed rules. No need to edit. |
+| `index.html` | The page — UI, styling, scoring logic. No need to edit. |
 | `picks.js` | The 23 picks (name + team + scorer). Edit only if a pick changes. |
-| `results.js` | **The file you edit** as the tournament progresses. |
+| `results.js` | Standings data — **auto-generated** (or hand-edit as fallback). |
+| `scripts/update-results.js` | Fetches live data and rewrites `results.js`. |
+| `.github/workflows/update-results.yml` | Runs the script on a schedule / on demand. |
 
-> Note: data lives in `.js` files (not `.json`) so the page works by just
-> double-clicking it — browsers block reading local `.json` files over `file://`.
+> Data lives in `.js` files (not `.json`) so the page works by just double-clicking it —
+> browsers block reading local `.json` over `file://`.

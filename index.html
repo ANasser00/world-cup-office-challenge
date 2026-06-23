@@ -20,19 +20,18 @@
     font-size:12px;letter-spacing:.04em;padding:5px 10px;border-radius:5px;text-transform:uppercase}
   h1{font-size:34px;line-height:1.1;margin:14px 0 6px;font-weight:800}
   .sub{color:var(--muted);font-size:15px;margin:0}
+  .updated{color:var(--muted);font-size:12.5px;margin:6px 0 0}
+  .updated b{color:#b9c8de}
   .grid{display:grid;gap:18px}
   @media(min-width:760px){.grid.two{grid-template-columns:1.6fr 1fr}}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
-  .card h2{font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);
-    margin:0 0 4px}
+  .card h2{font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);margin:0 0 4px}
   .card .hint{color:var(--muted);font-size:13px;margin:0 0 14px}
-  /* dark horse highlight */
   .horse-lead{font-size:18px;font-weight:700;margin:0 0 4px}
   .horse-lead .em{color:var(--gold)}
   .horse-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
   .horse-row .hcap{margin-left:auto;font-weight:800;color:var(--green)}
   .horse-row .who{color:var(--muted);font-size:13px}
-  /* badges */
   .badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px;
     border:1px solid transparent;white-space:nowrap}
   .b-fav{background:rgba(244,197,66,.14);color:var(--fav);border-color:rgba(244,197,66,.35)}
@@ -42,7 +41,6 @@
   .b-long{background:rgba(224,99,99,.16);color:var(--long);border-color:rgba(224,99,99,.4)}
   .elim{background:rgba(224,99,99,.16);color:var(--red);border-color:rgba(224,99,99,.45)}
   .alive{background:rgba(22,176,122,.14);color:var(--green);border-color:rgba(22,176,122,.4)}
-  /* tables */
   table{width:100%;border-collapse:collapse}
   th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;
     color:var(--muted);font-weight:600;padding:0 10px 10px;border-bottom:1px solid var(--line)}
@@ -63,20 +61,23 @@
   .stagepill.gone{color:var(--red)}
   .scorer{font-size:12.5px;color:var(--muted);display:block}
   .pend{font-size:11px;color:#c9b25a;font-weight:700}
+  .proj{font-size:11px;color:#e0934a;font-weight:700}
   .award{font-size:11px;color:var(--green);font-weight:800}
   .award.zero{color:var(--muted)}
   .pendtag{font-size:10px;color:#c9b25a;font-weight:700;margin-left:4px}
-  /* scorer race rows */
-  .race-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+  .race-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);flex-wrap:wrap}
   .race-row .cnt{margin-left:auto;font-weight:700;color:var(--muted);font-size:13px}
-  .race-row .swing{color:var(--green);font-weight:800;font-size:13px;min-width:54px;text-align:right}
-  .race-row .who{color:var(--muted);font-size:12px;flex-basis:100%;margin-top:-2px;padding-left:0}
+  .race-row .goals{font-weight:800;color:var(--ink);font-size:13px;min-width:48px;text-align:right}
+  .race-row .swing{color:var(--green);font-weight:800;font-size:13px;min-width:64px;text-align:right}
+  .race-row .swing.proj{color:#e0934a}
+  .race-row .who{color:var(--muted);font-size:12px;flex-basis:100%}
   .empty{color:var(--muted);font-size:14px;padding:6px 0}
   .warn{background:rgba(224,99,99,.12);border:1px solid rgba(224,99,99,.4);color:#f1b5b5;
     padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:16px}
   footer{color:var(--muted);font-size:12.5px;margin-top:6px;line-height:1.7}
   footer b{color:var(--ink)}
   .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:12px}
 </style>
 </head>
 <body>
@@ -85,6 +86,7 @@
     <span class="tag">Office Game</span>
     <h1>World Cup Office Challenge</h1>
     <p class="sub">Pick a team. Pick a top scorer. Underdogs get a handicap — overperform to win.</p>
+    <p id="updated" class="updated"></p>
   </header>
 
   <div id="warnings"></div>
@@ -96,10 +98,8 @@
       <p class="hint">Everyone ranked by total. Eliminated players keep their points — they're still in the title race.</p>
       <table id="board">
         <thead>
-          <tr>
-            <th class="num">#</th><th>Player</th><th>Stage</th>
-            <th>Top scorer</th><th>Breakdown</th><th class="num">Total</th>
-          </tr>
+          <tr><th class="num">#</th><th>Player</th><th>Stage</th>
+            <th>Top scorer</th><th>Breakdown</th><th class="num">Total</th></tr>
         </thead>
         <tbody></tbody>
       </table>
@@ -126,10 +126,8 @@
       bonus can still change it at the end.</p>
     <table id="outBoard">
       <thead>
-        <tr>
-          <th>Player</th><th>Reached</th><th>Top scorer</th>
-          <th class="num">Locked</th><th class="num">Total</th>
-        </tr>
+        <tr><th>Player</th><th>Reached</th><th>Top scorer</th>
+          <th class="num">Locked</th><th class="num">Total</th></tr>
       </thead>
       <tbody></tbody>
     </table>
@@ -139,7 +137,7 @@
   <footer>
     <b>Scoring:</b> stage points + handicap bonus + top-scorer points.
     Group&nbsp;exit&nbsp;0 · R32&nbsp;3 · R16&nbsp;6 · QF&nbsp;9 · SF&nbsp;13 · Final&nbsp;17 · Winner&nbsp;22.
-    Correct top scorer +10, a top-3 finish +5 (added at the end).<br>
+    Correct top scorer +10, a top-3 finish +5 — <b>locked in only when the tournament ends</b>.<br>
     <b>Handicap buckets:</b>
     <span class="legend">
       <span class="badge b-fav">Favourites +0</span>
@@ -148,9 +146,8 @@
       <span class="badge b-under">Underdogs +10</span>
       <span class="badge b-long">Long shots +14</span>
     </span><br>
-    <b>To update:</b> edit <b>results.js</b> and refresh. When group stage ends, set each
-    knocked-out team to <code>out: true</code>; set teams that advanced to
-    <code>stage: "R32"</code>.
+    <b>Data updates automatically.</b> Standings come from a scheduled fetch (or run
+    <code>node scripts/update-results.js</code>). You can also hand-edit <code>results.js</code>.
   </footer>
 </div>
 
@@ -181,6 +178,7 @@ BUCKETS.forEach(b => b.teams.forEach(t => { TEAM_INFO[t] = { h:b.h, label:b.labe
 /* ---------- data ---------- */
 const PICKS = window.PICKS || [];
 const RESULTS = window.RESULTS || { teams:{}, topScorerGoals:{} };
+const GOALS = RESULTS.topScorerGoals || {};
 const warnings = [];
 
 function teamResult(team){
@@ -188,37 +186,47 @@ function teamResult(team){
   if (!r) return { stage:"GROUP", out:false };
   return { stage: r.stage || "GROUP", out: !!r.out };
 }
+function goalsOf(name){ return GOALS[name] || 0; }
 
 /* ---------- top-scorer race ---------- */
 function scorerRanking(){
-  const goals = RESULTS.topScorerGoals || {};
-  const values = [...new Set(Object.values(goals).filter(g => g > 0))].sort((a,b)=>b-a);
+  const values = [...new Set(Object.values(GOALS).filter(g => g > 0))].sort((a,b)=>b-a);
   const max = values[0] || 0;
   const top3vals = new Set(values.slice(0,3));
-  const leaders = Object.entries(goals).filter(([,g]) => g>0 && g===max).map(([n])=>n);
-  return {
-    max,
-    leaders,
+  const leaders = Object.entries(GOALS).filter(([,g]) => g>0 && g===max).map(([n])=>n);
+  return { max, leaders,
     isLeader: n => leaders.includes(n),
-    isTop3:   n => (goals[n]>0) && top3vals.has(goals[n]),
-  };
+    isTop3:   n => (GOALS[n]>0) && top3vals.has(GOALS[n]) };
 }
 const rk = scorerRanking();
-const SCORER_ANNOUNCED = rk.max > 0;   // goals entered = tournament scoring known
+const SCORER_HAS_DATA = rk.max > 0;                       // goals are being tracked
+/* Points only LOCK when the tournament is over (a champion exists) or you force it. */
+const TOURNAMENT_OVER = Object.values(RESULTS.teams||{}).some(t => t && t.stage === "WINNER")
+  || RESULTS.topScorerFinal === true;
 
-/* returns {state, pts, label} for a picked scorer */
+/* state: leader/top3/none (locked) · proj-* (live, not locked) · pending (no data) */
 function scorerState(name){
-  if (!SCORER_ANNOUNCED) return { state:"pending", pts:0 };
-  if (rk.isLeader(name))  return { state:"leader", pts:SCORER_EXACT };
-  if (rk.isTop3(name))    return { state:"top3",   pts:SCORER_TOP3 };
-  return { state:"none", pts:0 };
+  if (TOURNAMENT_OVER){
+    if (rk.isLeader(name)) return { state:"leader", pts:SCORER_EXACT };
+    if (rk.isTop3(name))   return { state:"top3",   pts:SCORER_TOP3 };
+    return { state:"none", pts:0 };
+  }
+  if (!SCORER_HAS_DATA) return { state:"pending", pts:0 };
+  if (rk.isLeader(name)) return { state:"proj-leader", pts:0 };
+  if (rk.isTop3(name))   return { state:"proj-top3",   pts:0 };
+  return { state:"proj-none", pts:0 };
 }
 function scorerCellHTML(r){
-  const s = r.scorerSt;
-  if (s.state === "pending") return `<span class="scorer">${esc(r.scorer)}</span><span class="pend">⏳ pending</span>`;
-  if (s.state === "leader")  return `<span class="scorer">${esc(r.scorer)}</span><span class="award">+10 🥇 Golden Boot</span>`;
-  if (s.state === "top3")    return `<span class="scorer">${esc(r.scorer)}</span><span class="award">+5 top 3</span>`;
-  return `<span class="scorer">${esc(r.scorer)}</span><span class="award zero">no bonus</span>`;
+  const g = goalsOf(r.scorer), gtxt = SCORER_HAS_DATA ? ` (${g}g)` : "";
+  const nm = `<span class="scorer">${esc(r.scorer)}${gtxt}</span>`;
+  switch(r.scorerSt.state){
+    case "leader":      return nm + `<span class="award">+10 🥇 Golden Boot</span>`;
+    case "top3":        return nm + `<span class="award">+5 top 3</span>`;
+    case "none":        return nm + `<span class="award zero">no bonus</span>`;
+    case "proj-leader": return nm + `<span class="proj">🔥 leading — +10 if it holds</span>`;
+    case "proj-top3":   return nm + `<span class="proj">🔥 top 3 — +5 if it holds</span>`;
+    default:            return nm + `<span class="pend">⏳ pending</span>`;
+  }
 }
 
 /* ---------- validation ---------- */
@@ -230,7 +238,7 @@ function scorerCellHTML(r){
     seen[p.team] = p.name;
   });
   Object.entries(RESULTS.teams||{}).forEach(([t,r])=>{
-    if (r.stage && !(r.stage in STAGE_POINTS)) warnings.push(`Unknown stage "${r.stage}" for ${t}. Use GROUP/R32/R16/QF/SF/FINAL/WINNER.`);
+    if (r.stage && !(r.stage in STAGE_POINTS)) warnings.push(`Unknown stage "${r.stage}" for ${t}.`);
   });
 })();
 
@@ -240,22 +248,27 @@ const rows = PICKS.map(p => {
   const res = teamResult(p.team);
   const stagePts = STAGE_POINTS[res.stage] ?? 0;
   const scorerSt = scorerState(p.scorer);
-  const locked = stagePts + info.h;                 // team points (final once out)
-  return {
-    ...p, info, res, stagePts, handicap: info.h, scorerSt,
-    locked, total: locked + scorerSt.pts,
-    eliminated: res.out,
-  };
+  const locked = stagePts + info.h;
+  return { ...p, info, res, stagePts, handicap: info.h, scorerSt,
+    locked, total: locked + scorerSt.pts, eliminated: res.out };
 });
 rows.sort((a,b) => b.total - a.total || b.handicap - a.handicap || a.name.localeCompare(b.name));
 
+/* ---------- last-updated line ---------- */
+if (RESULTS.updatedAt){
+  let when = RESULTS.updatedAt;
+  try { when = new Date(RESULTS.updatedAt).toLocaleString(); } catch(e){}
+  document.getElementById("updated").innerHTML =
+    `Standings updated <b>${esc(when)}</b> · source: ${esc(RESULTS.source||"manual")}` +
+    (RESULTS.totalGoalsActual ? ` · ${RESULTS.totalGoalsActual} goals so far` : "");
+}
+
 /* ---------- scorer banner ---------- */
-document.getElementById("scorerBanner").innerHTML = SCORER_ANNOUNCED
-  ? ``
-  : `<div class="warn" style="background:rgba(244,197,66,.10);border-color:rgba(244,197,66,.35);color:#e8d488">
-       <b>Top-scorer points are pending.</b> They're added at the end of the tournament.
-       Fill in <b>results.js → topScorerGoals</b> to lock them in (+10 Golden Boot, +5 top 3).
-     </div>`;
+document.getElementById("scorerBanner").innerHTML = TOURNAMENT_OVER ? `` :
+  `<div class="warn" style="background:rgba(244,197,66,.10);border-color:rgba(244,197,66,.35);color:#e8d488">
+     <b>Top-scorer points are not locked yet.</b> They're added when the tournament ends.
+     ${SCORER_HAS_DATA ? "Below they're shown as live projections (🔥) — they don't count in totals until the final whistle." : "Goals will appear here once matches are played."}
+   </div>`;
 
 /* ---------- leaderboard ---------- */
 const tbody = document.querySelector("#board tbody");
@@ -267,23 +280,18 @@ tbody.innerHTML = rows.map((r,i) => {
   const rankCls = i===0?"r1":i===1?"r2":i===2?"r3":"";
   const isLead = r.total === leadScore && leadScore > 0;
   const gone = r.eliminated;
-  const stageCls = gone ? "gone" : "";
-  const stageTxt = gone
-    ? `Out · ${STAGE_LABEL[r.res.stage]}`
-    : STAGE_LABEL[r.res.stage];
-  const statusBadge = gone
-    ? `<span class="badge elim">Eliminated</span>`
-    : `<span class="badge alive">Still in</span>`;
+  const stageTxt = gone ? `Out · ${STAGE_LABEL[r.res.stage]}` : STAGE_LABEL[r.res.stage];
+  const statusBadge = gone ? `<span class="badge elim">Eliminated</span>` : `<span class="badge alive">Still in</span>`;
   return `<tr class="${gone?'dead':''} ${isLead?'lead':''}">
     <td class="num rank ${rankCls}">${i+1}</td>
     <td><span class="pname">${esc(r.name)}</span>
         <span class="team">${esc(r.team)} <span class="badge ${r.info.cls}">${r.info.label} +${r.info.h}</span> ${statusBadge}</span></td>
-    <td><span class="stagepill ${stageCls}">${stageTxt}</span></td>
+    <td><span class="stagepill ${gone?'gone':''}">${stageTxt}</span></td>
     <td>${scorerCellHTML(r)}</td>
     <td><span class="chips">${r.stagePts}<span class="chip">stage</span>
         <span class="chip h">+${r.handicap} hcap</span>
         ${r.scorerSt.pts>0?`<span class="chip h">+${r.scorerSt.pts} scorer</span>`:""}</span></td>
-    <td class="num"><span class="total">${r.total}</span>${!SCORER_ANNOUNCED?`<span class="pendtag">+?</span>`:""}</td>
+    <td class="num"><span class="total">${r.total}</span>${!TOURNAMENT_OVER?`<span class="pendtag">+?</span>`:""}</td>
   </tr>`;
 }).join("");
 
@@ -295,72 +303,77 @@ const leadEl = document.getElementById("horseLead");
 if (alive.length){
   const topH = alive[0].handicap;
   const leaders = alive.filter(r => r.handicap === topH);
-  if (topH === 0){
-    leadEl.innerHTML = `All big-upside teams are out — it's a <span class="em">favourites' race</span> now.`;
-  } else {
-    leadEl.innerHTML = leaders.map(r =>
-      `<span class="em">${esc(r.team)}</span> (+${r.handicap}, ${esc(r.name)})`).join(" & ")
+  leadEl.innerHTML = topH === 0
+    ? `All big-upside teams are out — it's a <span class="em">favourites' race</span> now.`
+    : leaders.map(r => `<span class="em">${esc(r.team)}</span> (+${r.handicap}, ${esc(r.name)})`).join(" & ")
       + ` ${leaders.length>1?'are':'is'} the biggest dark horse${leaders.length>1?'s':''} still standing.`;
-  }
   horsesEl.innerHTML = alive.slice(0,8).map(r =>
     `<div class="horse-row">
       <span class="badge ${r.info.cls}">${esc(r.team)}</span>
       <span class="who">${esc(r.name)}</span>
       <span class="hcap">+${r.handicap}</span>
     </div>`).join("");
-} else {
-  leadEl.textContent = "No teams left alive — update results.js.";
-}
+} else { leadEl.textContent = "No teams left alive."; }
 
 /* ---------- top scorer race ---------- */
 const raceEl = document.getElementById("race");
 const raceHint = document.getElementById("raceHint");
 const raceTitle = document.getElementById("raceTitle");
-if (!SCORER_ANNOUNCED){
-  raceTitle.textContent = "⚽ Top scorer race — pending";
-  raceHint.innerHTML = `Decided at the end. Each player's scorer is worth <b>+10</b> if they win
-    the Golden Boot, <b>+5</b> for a top-3 finish. Here's who's riding on whom:`;
-  // group picks by scorer
-  const byScorer = {};
-  rows.forEach(r => { (byScorer[r.scorer] ||= []).push(r.name); });
-  const list = Object.entries(byScorer).sort((a,b)=>b[1].length-a[1].length);
-  raceEl.innerHTML = list.map(([scorer,names]) =>
-    `<div class="race-row">
-       <span class="pname">${esc(scorer)}</span>
-       <span class="cnt">${names.length} ${names.length>1?'backers':'backer'}</span>
-       <span class="swing">+10 / +5</span>
-       <span class="who">${names.map(esc).join(", ")}</span>
-     </div>`).join("");
-} else {
+
+if (TOURNAMENT_OVER){
   raceTitle.textContent = "⚽ Top scorer race — result in";
-  const goals = RESULTS.topScorerGoals || {};
   raceHint.innerHTML = `Golden Boot: <b>${esc(rk.leaders.join(", "))}</b> (${rk.max} goals).
     Picks matching the leader earned +10; top-3 picks earned +5.`;
   const winners = rows.filter(r => r.scorerSt.pts > 0);
   raceEl.innerHTML = winners.length
-    ? winners.map(r =>
-      `<div class="race-row">
-         <span class="pname">${esc(r.name)}</span>
-         <span class="who">${esc(r.scorer)}</span>
-         <span class="swing">+${r.scorerSt.pts}</span>
-       </div>`).join("")
+    ? winners.map(r => `<div class="race-row"><span class="pname">${esc(r.name)}</span>
+         <span class="who">${esc(r.scorer)}</span><span class="swing">+${r.scorerSt.pts}</span></div>`).join("")
     : `<div class="empty">No picked scorer landed in the top 3.</div>`;
+} else if (SCORER_HAS_DATA){
+  raceTitle.textContent = "⚽ Top scorer race — live projection";
+  raceHint.innerHTML = `Not locked until the tournament ends. As it stands, the Golden Boot
+    would be <b>${esc(rk.leaders.join(", "))}</b> (${rk.max} goals). Here's where each picked scorer sits:`;
+  // distinct picked scorers, ranked by current goals
+  const byScorer = {};
+  rows.forEach(r => { (byScorer[r.scorer] ||= []).push(r.name); });
+  const list = Object.entries(byScorer)
+    .sort((a,b)=> goalsOf(b[0])-goalsOf(a[0]) || b[1].length-a[1].length);
+  raceEl.innerHTML = list.map(([scorer,names]) => {
+    const proj = scorerState(scorer);
+    const swing = proj.state==="proj-leader" ? "+10 🔥" : proj.state==="proj-top3" ? "+5 🔥" : "—";
+    return `<div class="race-row">
+       <span class="pname">${esc(scorer)}</span>
+       <span class="goals">${goalsOf(scorer)}g</span>
+       <span class="swing proj">${swing}</span>
+       <span class="cnt">${names.length} ${names.length>1?'backers':'backer'}</span>
+       <span class="who">${names.map(esc).join(", ")}</span>
+     </div>`;
+  }).join("");
+} else {
+  raceTitle.textContent = "⚽ Top scorer race — pending";
+  raceHint.innerHTML = `Decided at the end. Each player's scorer is worth <b>+10</b> for the
+    Golden Boot, <b>+5</b> for a top-3 finish. Who's riding on whom:`;
+  const byScorer = {};
+  rows.forEach(r => { (byScorer[r.scorer] ||= []).push(r.name); });
+  raceEl.innerHTML = Object.entries(byScorer).sort((a,b)=>b[1].length-a[1].length).map(([scorer,names]) =>
+    `<div class="race-row"><span class="pname">${esc(scorer)}</span>
+       <span class="cnt">${names.length} ${names.length>1?'backers':'backer'}</span>
+       <span class="swing">+10 / +5</span>
+       <span class="who">${names.map(esc).join(", ")}</span></div>`).join("");
 }
 
 /* ---------- out of the running ---------- */
 const outTbody = document.querySelector("#outBoard tbody");
-const eliminated = rows.filter(r => r.eliminated)
-  .sort((a,b)=> b.total - a.total || a.name.localeCompare(b.name));
+const eliminated = rows.filter(r => r.eliminated).sort((a,b)=> b.total - a.total || a.name.localeCompare(b.name));
 if (eliminated.length){
   document.getElementById("outEmpty").style.display = "none";
   outTbody.innerHTML = eliminated.map(r =>
-    `<tr>
-      <td><span class="pname">${esc(r.name)}</span>
+    `<tr><td><span class="pname">${esc(r.name)}</span>
           <span class="team">${esc(r.team)} <span class="badge ${r.info.cls}">+${r.info.h}</span></span></td>
       <td><span class="stagepill gone">${STAGE_LABEL[r.res.stage]}</span></td>
       <td>${scorerCellHTML(r)}</td>
       <td class="num"><b>${r.locked}</b></td>
-      <td class="num"><span class="total">${r.total}</span>${!SCORER_ANNOUNCED?`<span class="pendtag">+?</span>`:""}</td>
+      <td class="num"><span class="total">${r.total}</span>${!TOURNAMENT_OVER?`<span class="pendtag">+?</span>`:""}</td>
     </tr>`).join("");
 } else {
   document.querySelector("#outBoard").style.display = "none";
