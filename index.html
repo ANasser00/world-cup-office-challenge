@@ -23,7 +23,8 @@
   .updated{color:var(--muted);font-size:12.5px;margin:6px 0 0}
   .updated b{color:#b9c8de}
   .grid{display:grid;gap:18px}
-  @media(min-width:760px){.grid.two{grid-template-columns:1.6fr 1fr}}
+  @media(min-width:760px){.grid.two{grid-template-columns:1.6fr 1fr;align-items:start}}
+  .rail{display:flex;flex-direction:column}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
   .card h2{font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);margin:0 0 4px}
   .card .hint{color:var(--muted);font-size:13px;margin:0 0 14px}
@@ -114,20 +115,22 @@
       </table>
     </section>
 
-    <aside class="card">
-      <h2>🐎 Dark horses</h2>
-      <p id="horseLead" class="horse-lead"></p>
-      <p class="hint">Picked teams still alive, ranked by handicap upside. The further a
-        high-handicap team goes, the more its points stack.</p>
-      <div id="horses"></div>
-    </aside>
-  </div>
+    <div class="rail">
+      <aside class="card">
+        <h2>🐎 Dark horses</h2>
+        <p id="horseLead" class="horse-lead"></p>
+        <p class="hint">Picked teams still alive, ranked by handicap upside. The further a
+          high-handicap team goes, the more its points stack.</p>
+        <div id="horses"></div>
+      </aside>
 
-  <section class="card">
-    <h2>🗓️ Latest matches</h2>
-    <p class="hint">Most recent results. ⭐ marks a team someone picked.</p>
-    <div id="matches"></div>
-  </section>
+      <section class="card">
+        <h2>🗓️ Latest matches</h2>
+        <p class="hint">Most recent results. ⭐ marks a team someone picked.</p>
+        <div id="matches"></div>
+      </section>
+    </div>
+  </div>
 
   <section class="card">
     <h2 id="raceTitle">⚽ Top scorer race</h2>
