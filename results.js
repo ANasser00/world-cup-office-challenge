@@ -65,15 +65,15 @@ window.RESULTS = {
     "Austria":      { stage: "GROUP", out: false },
   },
 
-  // Goals so far — approximate snapshot as of ~2026-06-17. Refresh anytime
+  // Goals so far — as of ~2026-06-23 (sources: Goal.com / FOX). Refresh anytime
   // (ask Claude to "update the results"). Add ANY scorer, not just picked ones.
   topScorerGoals: {
-    "Lionel Messi":    3,
+    "Lionel Messi":    5,
+    "Kylian Mbappé":   4,
+    "Erling Haaland":  4,
     "Deniz Undav":     3,
     "Jonathan David":  3,
-    "Kylian Mbappé":   2,
     "Harry Kane":      2,
-    "Erling Haaland":  2,
     "Vinícius Júnior": 2,
     "Kai Havertz":     2,
     "Mikel Oyarzabal": 2,
