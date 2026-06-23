@@ -87,6 +87,7 @@ window.RESULTS = {
 
   // Most recent results (newest first). { date, team1, s1, s2, team2, stage }
   recentMatches: [
+    { date: "2026-06-23", team1: "Jordan",    s1: 1, s2: 2, team2: "Algeria",    stage: "Group" },
     { date: "2026-06-22", team1: "Argentina", s1: 2, s2: 0, team2: "Austria",    stage: "Group" },
     { date: "2026-06-22", team1: "France",    s1: 3, s2: 0, team2: "Iraq",       stage: "Group" },
     { date: "2026-06-22", team1: "Norway",    s1: 3, s2: 2, team2: "Senegal",    stage: "Group" },
