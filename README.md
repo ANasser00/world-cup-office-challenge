@@ -21,8 +21,11 @@ Open `results.js`, edit the values, **save, and refresh the page.** That's the w
    `stage` = furthest stage reached (`GROUP · R32 · R16 · QF · SF · FINAL · WINNER`),
    `out: true` once eliminated. You don't enter match scores — just who advanced/out.
 
-2. **Top scorer goals** — leave at 0 until near the end; the bonus only locks then.
-   Enter `"Kylian Mbappé": 7` etc. Add any player; the app finds the leader + top 3.
+2. **Top scorer goals** — `"Kylian Mbappé": 7`. Add any player; the app finds the
+   leader + top 3 and lists everyone in the **Scorers** table. Bonus only locks at the end.
+
+3. **Recent matches** (optional) — add finished games to `recentMatches` to fill the
+   **Latest matches** card: `{ date:"2026-06-22", team1:"France", s1:3, s2:0, team2:"Iraq", stage:"Group" }`.
 
 > **Shortcut:** ask Claude to "update the results" and it can look up the latest scores
 > and fill in `results.js` for you.
@@ -46,6 +49,8 @@ Eliminated players move into the **❌ Out of the running** table — their scor
   who's riding on which scorer, and (once you enter goals) a **live projection**
   (🔥 "leading — +10 if it holds") without banking points early. A `+?` on a total means
   a top-scorer bonus is still in play.
+- **🗓️ Latest matches** — the most recent 4–5 results (⭐ marks a picked team).
+- **👟 Scorers — goals so far** — the top-scorer chart, ⭐ marking picked scorers.
 - **❌ Out of the running** — eliminated players with their locked score.
 
 ## Scoring (from the challenge deck)

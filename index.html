@@ -71,6 +71,15 @@
   .race-row .swing{color:var(--green);font-weight:800;font-size:13px;min-width:64px;text-align:right}
   .race-row .swing.proj{color:#e0934a}
   .race-row .who{color:var(--muted);font-size:12px;flex-basis:100%}
+  .match-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;flex-wrap:wrap}
+  .match-row:first-child{border-top:none}
+  .match-date{color:var(--muted);font-size:12px;min-width:52px}
+  .match-teams{flex:1;display:flex;align-items:center;gap:8px;justify-content:flex-start;flex-wrap:wrap}
+  .match-t{font-weight:700}
+  .match-t.lose{color:var(--muted);font-weight:600}
+  .match-score{font-weight:800;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 9px}
+  .match-stage{color:var(--muted);font-size:11px;margin-left:auto}
+  .pickmark{color:var(--gold)}
   .empty{color:var(--muted);font-size:14px;padding:6px 0}
   .warn{background:rgba(224,99,99,.12);border:1px solid rgba(224,99,99,.4);color:#f1b5b5;
     padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:16px}
@@ -115,6 +124,12 @@
   </div>
 
   <section class="card">
+    <h2>🗓️ Latest matches</h2>
+    <p class="hint">Most recent results. ⭐ marks a team someone picked.</p>
+    <div id="matches"></div>
+  </section>
+
+  <section class="card">
     <h2 id="raceTitle">⚽ Top scorer race</h2>
     <p id="raceHint" class="hint"></p>
     <div id="race"></div>
@@ -132,6 +147,16 @@
       <tbody></tbody>
     </table>
     <div id="outEmpty" class="empty" style="display:none">Nobody's out yet — group stage in progress. 🎉</div>
+  </section>
+
+  <section class="card">
+    <h2>👟 Scorers — goals so far</h2>
+    <p class="hint">Top-scorer chart. ⭐ = picked by someone in the pool. The +10/+5 bonus locks at the end.</p>
+    <table id="scorerBoard">
+      <thead><tr><th class="num">#</th><th>Player</th><th class="num">Goals</th><th>Picked by</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div id="scorerEmpty" class="empty" style="display:none">No goals recorded yet.</div>
   </section>
 
   <footer>
@@ -379,6 +404,51 @@ if (eliminated.length){
 } else {
   document.querySelector("#outBoard").style.display = "none";
   document.getElementById("outEmpty").style.display = "block";
+}
+
+/* ---------- latest matches ---------- */
+const pickedTeams = new Set(PICKS.map(p => p.team));
+const pickedScorerMap = {};
+PICKS.forEach(p => { (pickedScorerMap[p.scorer] ||= []).push(p.name); });
+
+const matches = (RESULTS.recentMatches || []).slice()
+  .sort((a,b) => String(b.date).localeCompare(String(a.date))).slice(0,5);
+const matchesEl = document.getElementById("matches");
+matchesEl.innerHTML = matches.length ? matches.map(m => {
+  const w1 = m.s1 > m.s2, w2 = m.s2 > m.s1;
+  const mark = t => pickedTeams.has(t) ? ` <span class="pickmark">⭐</span>` : "";
+  let d = m.date; try { d = new Date(m.date).toLocaleDateString(undefined,{month:"short",day:"numeric"}); } catch(e){}
+  return `<div class="match-row">
+    <span class="match-date">${esc(d)}</span>
+    <span class="match-teams">
+      <span class="match-t ${w2?'lose':''}">${esc(m.team1)}${mark(m.team1)}</span>
+      <span class="match-score">${m.s1}–${m.s2}</span>
+      <span class="match-t ${w1?'lose':''}">${esc(m.team2)}${mark(m.team2)}</span>
+    </span>
+    <span class="match-stage">${esc(m.stage||"")}</span>
+  </div>`;
+}).join("") : `<div class="empty">No matches added yet — add them in results.js.</div>`;
+
+/* ---------- scorers table ---------- */
+const scorers = Object.entries(GOALS).filter(([,g]) => g > 0)
+  .sort((a,b) => b[1]-a[1] || a[0].localeCompare(b[0]));
+const sTbody = document.querySelector("#scorerBoard tbody");
+if (scorers.length){
+  document.getElementById("scorerEmpty").style.display = "none";
+  let lastG = null, rank = 0, shown = 0;
+  sTbody.innerHTML = scorers.map(([name,g]) => {
+    shown++; if (g !== lastG){ rank = shown; lastG = g; }   // competition ranking (ties share)
+    const backers = pickedScorerMap[name];
+    const star = backers ? ` <span class="pickmark">⭐</span>` : "";
+    const by = backers ? `<span class="who">${backers.map(esc).join(", ")}</span>` : `<span style="color:var(--muted)">—</span>`;
+    const rcls = rank===1?"r1":rank===2?"r2":rank===3?"r3":"";
+    return `<tr><td class="num rank ${rcls}">${rank}</td>
+      <td><span class="pname">${esc(name)}${star}</span></td>
+      <td class="num"><b>${g}</b></td><td>${by}</td></tr>`;
+  }).join("");
+} else {
+  document.querySelector("#scorerBoard").style.display = "none";
+  document.getElementById("scorerEmpty").style.display = "block";
 }
 
 /* ---------- warnings ---------- */

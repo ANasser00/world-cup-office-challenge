@@ -26,6 +26,9 @@
    just fill them in once near the end; before that the page shows them as pending.
    Add ANY player, not only the picked ones — the app finds the leader and top 3.
 
+   RECENT MATCHES — shown in the "Latest matches" card. Newest by date appears first.
+   Each: { date:"YYYY-MM-DD", team1, s1, s2, team2, stage }. Add as games finish.
+
    TOTAL GOALS — optional. The real total goals in the tournament, used only for the
    tie-break ("closest guess wins"). Leave null until known.
 
@@ -62,16 +65,35 @@ window.RESULTS = {
     "Austria":      { stage: "GROUP", out: false },
   },
 
+  // Goals so far — approximate snapshot as of ~2026-06-17. Refresh anytime
+  // (ask Claude to "update the results"). Add ANY scorer, not just picked ones.
   topScorerGoals: {
-    "Kylian Mbappé":   0,
-    "Lionel Messi":    0,
-    "Harry Kane":      0,
+    "Lionel Messi":    3,
+    "Deniz Undav":     3,
+    "Jonathan David":  3,
+    "Kylian Mbappé":   2,
+    "Harry Kane":      2,
+    "Erling Haaland":  2,
+    "Vinícius Júnior": 2,
+    "Kai Havertz":     2,
+    "Mikel Oyarzabal": 2,
+    "Cody Gakpo":      2,
+    "Folarin Balogun": 2,
+    "Alexander Isak":  1,
     "Michael Olise":   0,
-    "Vinícius Júnior": 0,
     "Ousmane Dembélé": 0,
-    "Erling Haaland":  0,
     "Julián Álvarez":  0,
-    "Alexander Isak":  0,
   },
+
+  // Most recent results (newest first). { date, team1, s1, s2, team2, stage }
+  recentMatches: [
+    { date: "2026-06-22", team1: "Argentina", s1: 2, s2: 0, team2: "Austria",    stage: "Group" },
+    { date: "2026-06-22", team1: "France",    s1: 3, s2: 0, team2: "Iraq",       stage: "Group" },
+    { date: "2026-06-22", team1: "Norway",    s1: 3, s2: 2, team2: "Senegal",    stage: "Group" },
+    { date: "2026-06-17", team1: "England",   s1: 4, s2: 2, team2: "Croatia",    stage: "Group" },
+    { date: "2026-06-17", team1: "Ghana",     s1: 1, s2: 0, team2: "Panama",     stage: "Group" },
+    { date: "2026-06-17", team1: "Portugal",  s1: 1, s2: 1, team2: "DR Congo",   stage: "Group" },
+    { date: "2026-06-17", team1: "Colombia",  s1: 3, s2: 1, team2: "Uzbekistan", stage: "Group" },
+  ],
 
 };
