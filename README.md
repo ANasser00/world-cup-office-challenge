@@ -9,42 +9,32 @@ get a handicap, overperform to win. No backend, no database, no API key.
 To share with the office, push to GitHub and turn on **GitHub Pages** (free) — everyone
 gets a link, and only people with repo access can change the data.
 
-## Standings update automatically 🎉
+## Update standings (the only file you touch: `results.js`)
 
-The results (which teams advanced, who's out, goal scorers) are pulled from a free public
-dataset — [openfootball](https://github.com/openfootball/worldcup.json) — so **you don't
-have to keep score by hand.** There are three ways it refreshes, all running the same
-script (`scripts/update-results.js`), which rewrites `results.js`:
+Open `results.js`, edit the values, **save, and refresh the page.** That's the whole loop.
 
-| How | What to do | Good for |
-|---|---|---|
-| **Scheduled** | Nothing — the GitHub Action runs daily (midday Gulf time). | Set-and-forget |
-| **On demand** | Repo → **Actions** tab → *Update results* → **Run workflow**. | "Refresh now" |
-| **Locally** | `node scripts/update-results.js` (Node 18+, no install). | No GitHub / testing |
+1. **Teams** — for each team set how far it reached and whether it's out:
+   ```js
+   "Ghana": { stage: "R16", out: false }   // reached round of 16, still alive
+   "Spain": { stage: "GROUP", out: true }  // knocked out in the groups
+   ```
+   `stage` = furthest stage reached (`GROUP · R32 · R16 · QF · SF · FINAL · WINNER`),
+   `out: true` once eliminated. You don't enter match scores — just who advanced/out.
 
-Because everyone reads the same published `results.js`, there's effectively **one updater**
-(the schedule, or whoever has repo access) — a random viewer can't change the standings.
+2. **Top scorer goals** — leave at 0 until near the end; the bonus only locks then.
+   Enter `"Kylian Mbappé": 7` etc. Add any player; the app finds the leader + top 3.
 
-> openfootball is community-maintained and refreshes roughly once a day, so this is
-> "updated daily," not second-by-second live. Perfect for a game that runs over weeks.
+> **Shortcut:** ask Claude to "update the results" and it can look up the latest scores
+> and fill in `results.js` for you.
 
-### To enable the schedule (one-time)
-1. Push this folder to a GitHub repo.
-2. Settings → **Pages** → deploy from `main` branch (gets you the shareable link).
-3. Settings → **Actions** → **General** → allow workflows to read/write. That's it —
-   the daily job will keep `results.js` (and the live page) up to date.
-   Change the time in `.github/workflows/update-results.yml` (one cron line, in UTC).
+## When the group stage ends
 
-## Prefer to keep score manually?
+In `results.js`, for each team:
+- **Didn't qualify** → set `out: true` (leave `stage: "GROUP"` = 0 pts).
+- **Advanced** → set `stage: "R32"`.
 
-You can. Just edit `results.js` by hand and refresh — but note the scheduled job will
-overwrite it on its next run (pause the schedule if you want full manual control).
-
-- **Teams** — `"Ghana": { stage: "R16", out: false }`.
-  `stage` = furthest reached (`GROUP · R32 · R16 · QF · SF · FINAL · WINNER`),
-  `out: true` once eliminated.
-- **Top scorer goals** — `"Kylian Mbappé": 7`. Add any player; the app finds the
-  leader and top 3, ties included.
+Eliminated players move into the **❌ Out of the running** table — their score is now
+**locked**, and only the end-of-tournament top-scorer bonus can still change it.
 
 ## How the page reads
 
@@ -52,10 +42,10 @@ overwrite it on its next run (pause the schedule if you want full manual control
   keep their points (still in the title race).
 - **🐎 Dark horses** — high-handicap teams still alive, the overperformers to watch
   (the "Ghana is outstanding right now" view).
-- **⚽ Top scorer race** — top-scorer points only **lock at the end** of the tournament.
-  Until then it shows a **live projection** (🔥 "leading — +10 if it holds") so you can
-  see who *would* gain, without banking the points early. A `+?` on a total means a
-  top-scorer bonus is still in play.
+- **⚽ Top scorer race** — top-scorer points only **lock at the end**. Until then it shows
+  who's riding on which scorer, and (once you enter goals) a **live projection**
+  (🔥 "leading — +10 if it holds") without banking points early. A `+?` on a total means
+  a top-scorer bonus is still in play.
 - **❌ Out of the running** — eliminated players with their locked score.
 
 ## Scoring (from the challenge deck)
@@ -81,9 +71,7 @@ Winner = highest total; tie broken by closest guess to total tournament goals.
 |---|---|
 | `index.html` | The page — UI, styling, scoring logic. No need to edit. |
 | `picks.js` | The 23 picks (name + team + scorer). Edit only if a pick changes. |
-| `results.js` | Standings data — **auto-generated** (or hand-edit as fallback). |
-| `scripts/update-results.js` | Fetches live data and rewrites `results.js`. |
-| `.github/workflows/update-results.yml` | Runs the script on a schedule / on demand. |
+| `results.js` | **The file you edit** as the tournament progresses. |
 
 > Data lives in `.js` files (not `.json`) so the page works by just double-clicking it —
 > browsers block reading local `.json` over `file://`.
