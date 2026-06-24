@@ -79,9 +79,10 @@ window.RESULTS = {
     "Mikel Oyarzabal": 2,
     "Cody Gakpo":      2,
     "Folarin Balogun": 2,
+    "Cristiano Ronaldo": 2,
     "Alexander Isak":  1,
+    "Ousmane Dembélé": 1,
     "Michael Olise":   0,
-    "Ousmane Dembélé": 0,
     "Julián Álvarez":  0,
   },
 
