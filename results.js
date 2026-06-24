@@ -65,7 +65,7 @@ window.RESULTS = {
     "Austria":      { stage: "GROUP", out: false },
   },
 
-  // Goals so far — as of ~2026-06-23 (sources: Goal.com / FOX). Refresh anytime
+  // Goals so far — as of ~2026-06-24 (sources: Goal.com / FOX). Refresh anytime
   // (ask Claude to "update the results"). Add ANY scorer, not just picked ones.
   topScorerGoals: {
     "Lionel Messi":    5,
@@ -87,6 +87,10 @@ window.RESULTS = {
 
   // Most recent results (newest first). { date, team1, s1, s2, team2, stage }
   recentMatches: [
+    { date: "2026-06-23", team1: "Portugal",  s1: 5, s2: 0, team2: "Uzbekistan", stage: "Group" },
+    { date: "2026-06-23", team1: "Colombia",  s1: 1, s2: 0, team2: "DR Congo",   stage: "Group" },
+    { date: "2026-06-23", team1: "England",   s1: 0, s2: 0, team2: "Ghana",      stage: "Group" },
+    { date: "2026-06-23", team1: "Panama",    s1: 0, s2: 1, team2: "Croatia",    stage: "Group" },
     { date: "2026-06-23", team1: "Jordan",    s1: 1, s2: 2, team2: "Algeria",    stage: "Group" },
     { date: "2026-06-22", team1: "Argentina", s1: 2, s2: 0, team2: "Austria",    stage: "Group" },
     { date: "2026-06-22", team1: "France",    s1: 3, s2: 0, team2: "Iraq",       stage: "Group" },
