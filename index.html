@@ -81,6 +81,11 @@
   .match-score{font-weight:800;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 9px}
   .match-stage{color:var(--muted);font-size:11px;margin-left:auto}
   .pickmark{color:var(--gold)}
+  .toggle-btn{float:right;font-size:11px;font-weight:700;text-transform:none;letter-spacing:0;
+    background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+    border-radius:6px;padding:4px 11px;cursor:pointer}
+  .toggle-btn:hover{border-color:var(--gold);color:var(--gold)}
+  .avail{background:rgba(63,179,163,.14);color:var(--under);border-color:rgba(63,179,163,.4)}
   .empty{color:var(--muted);font-size:14px;padding:6px 0}
   .warn{background:rgba(224,99,99,.12);border:1px solid rgba(224,99,99,.4);color:#f1b5b5;
     padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:16px}
@@ -131,6 +136,20 @@
       </section>
     </div>
   </div>
+
+  <section class="card">
+    <h2>📋 Every team's value
+      <button id="teamsToggle" class="toggle-btn">Show all teams</button></h2>
+    <p class="hint">Current office points (stage + handicap) for every team in the draft —
+      see the upside of teams nobody picked.</p>
+    <div id="allTeamsWrap" style="display:none">
+      <table id="allTeams">
+        <thead><tr><th class="num">#</th><th>Team</th><th>Stage</th>
+          <th class="num">Points</th><th>Picked by</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
 
   <section class="card">
     <h2 id="raceTitle">⚽ Top scorer race</h2>
@@ -450,6 +469,39 @@ if (scorers.length){
   document.querySelector("#scorerBoard").style.display = "none";
   document.getElementById("scorerEmpty").style.display = "block";
 }
+
+/* ---------- every team's value (collapsible) ---------- */
+const pickerByTeam = {};
+PICKS.forEach(p => { pickerByTeam[p.team] = p.name; });
+const teamRows = [];
+BUCKETS.forEach(b => b.teams.forEach(t => {
+  const res = teamResult(t);
+  teamRows.push({ team:t, h:b.h, cls:b.cls, label:b.label, res,
+    pts: (STAGE_POINTS[res.stage] ?? 0) + b.h, picker: pickerByTeam[t] || null });
+}));
+teamRows.sort((a,b) => b.pts - a.pts || b.h - a.h || a.team.localeCompare(b.team));
+document.querySelector("#allTeams tbody").innerHTML = teamRows.map((r,i) => {
+  const gone = r.res.out;
+  const stageTxt = (gone ? "Out · " : "") + STAGE_LABEL[r.res.stage];
+  const who = r.picker
+    ? `<span class="who">${esc(r.picker)}</span>`
+    : `<span class="badge avail">Available</span>`;
+  return `<tr class="${gone?'dead':''}">
+    <td class="num rank">${i+1}</td>
+    <td><span class="pname">${esc(r.team)}</span>
+        <span class="badge ${r.cls}" style="margin-left:6px">${r.label} +${r.h}</span></td>
+    <td><span class="stagepill ${gone?'gone':''}">${stageTxt}</span></td>
+    <td class="num"><b>${r.pts}</b></td>
+    <td>${who}</td></tr>`;
+}).join("");
+(function(){
+  const wrap = document.getElementById("allTeamsWrap"), btn = document.getElementById("teamsToggle");
+  btn.addEventListener("click", () => {
+    const show = wrap.style.display === "none";
+    wrap.style.display = show ? "block" : "none";
+    btn.textContent = show ? "Hide" : "Show all teams";
+  });
+})();
 
 /* ---------- warnings ---------- */
 if (warnings.length){
