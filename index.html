@@ -86,6 +86,12 @@
     border-radius:6px;padding:4px 11px;cursor:pointer}
   .toggle-btn:hover{border-color:var(--gold);color:var(--gold)}
   .avail{background:rgba(63,179,163,.14);color:var(--under);border-color:rgba(63,179,163,.4)}
+  .scrollbox{max-height:300px;overflow-y:auto;scroll-behavior:smooth;border-top:1px solid var(--line)}
+  .scrollbox::-webkit-scrollbar{width:8px}
+  .scrollbox::-webkit-scrollbar-track{background:transparent}
+  .scrollbox::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+  .scrollbox{scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  #allTeams thead th{position:sticky;top:0;background:var(--panel);z-index:1}
   .empty{color:var(--muted);font-size:14px;padding:6px 0}
   .warn{background:rgba(224,99,99,.12);border:1px solid rgba(224,99,99,.4);color:#f1b5b5;
     padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:16px}
@@ -136,16 +142,17 @@
       </section>
 
       <section class="card">
-        <h2>📋 Every team's value
+        <h2>📋 Teams nobody picked
           <button id="teamsToggle" class="toggle-btn">Show all</button></h2>
-        <p class="hint">Office points (stage + handicap) for every team — see the upside
-          of teams nobody picked.</p>
+        <p class="hint">The upside still on the board — office points (stage + handicap)
+          for teams no one drafted.</p>
         <div id="allTeamsWrap" style="display:none">
-          <table id="allTeams">
-            <thead><tr><th class="num">#</th><th>Team</th>
-              <th class="num">Pts</th><th>By</th></tr></thead>
-            <tbody></tbody>
-          </table>
+          <div class="scrollbox">
+            <table id="allTeams">
+              <thead><tr><th class="num">#</th><th>Team</th><th class="num">Pts</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
       </section>
     </div>
@@ -480,17 +487,14 @@ BUCKETS.forEach(b => b.teams.forEach(t => {
     pts: (STAGE_POINTS[res.stage] ?? 0) + b.h, picker: pickerByTeam[t] || null });
 }));
 teamRows.sort((a,b) => b.pts - a.pts || b.h - a.h || a.team.localeCompare(b.team));
-document.querySelector("#allTeams tbody").innerHTML = teamRows.map((r,i) => {
+const availRows = teamRows.filter(r => !r.picker);
+document.querySelector("#allTeams tbody").innerHTML = availRows.map((r,i) => {
   const gone = r.res.out;
-  const who = r.picker
-    ? `<span class="who">${esc(r.picker)}</span>`
-    : `<span class="badge avail">Available</span>`;
   return `<tr class="${gone?'dead':''}">
     <td class="num rank">${i+1}</td>
     <td><span class="pname">${esc(r.team)}</span>
         <span class="badge ${r.cls}" style="margin-left:6px">+${r.h}</span></td>
-    <td class="num"><b>${r.pts}</b></td>
-    <td>${who}</td></tr>`;
+    <td class="num"><b>${r.pts}</b></td></tr>`;
 }).join("");
 (function(){
   const wrap = document.getElementById("allTeamsWrap"), btn = document.getElementById("teamsToggle");
