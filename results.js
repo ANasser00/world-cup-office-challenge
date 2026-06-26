@@ -65,7 +65,7 @@ window.RESULTS = {
     "Austria":      { stage: "GROUP", out: false },
   },
 
-  // Goals so far — as of ~2026-06-24 (sources: Goal.com / FOX). Refresh anytime
+  // Goals so far — as of ~2026-06-26 (sources: Goal.com / FOX). Refresh anytime
   // (ask Claude to "update the results"). Add ANY scorer, not just picked ones.
   topScorerGoals: {
     "Lionel Messi":    5,
@@ -74,7 +74,7 @@ window.RESULTS = {
     "Deniz Undav":     3,
     "Jonathan David":  3,
     "Harry Kane":      2,
-    "Vinícius Júnior": 2,
+    "Vinícius Júnior": 4,
     "Kai Havertz":     2,
     "Mikel Oyarzabal": 2,
     "Cody Gakpo":      2,
@@ -88,6 +88,18 @@ window.RESULTS = {
 
   // Most recent results (newest first). { date, team1, s1, s2, team2, stage }
   recentMatches: [
+    { date: "2026-06-25", team1: "Türkiye",     s1: 3, s2: 2, team2: "United States",       stage: "Group" },
+    { date: "2026-06-25", team1: "Paraguay",    s1: 0, s2: 0, team2: "Australia",            stage: "Group" },
+    { date: "2026-06-25", team1: "Curaçao",     s1: 0, s2: 2, team2: "Cote d’Ivoire",        stage: "Group" },
+    { date: "2026-06-25", team1: "Ecuador",     s1: 2, s2: 1, team2: "Germany",              stage: "Group" },
+    { date: "2026-06-25", team1: "Japan",       s1: 1, s2: 1, team2: "Sweden",               stage: "Group" },
+    { date: "2026-06-25", team1: "Netherlands", s1: 3, s2: 1, team2: "Tunisia",              stage: "Group" },
+    { date: "2026-06-24", team1: "Mexico",      s1: 3, s2: 0, team2: "Czechia",              stage: "Group" },
+    { date: "2026-06-24", team1: "South Africa",s1: 1, s2: 0, team2: "South Korea",          stage: "Group" },
+    { date: "2026-06-24", team1: "Switzerland", s1: 3, s2: 1, team2: "Canada",               stage: "Group" },
+    { date: "2026-06-24", team1: "Bosnia & Herzegovina", s1: 3, s2: 1, team2: "Qatar",       stage: "Group" },
+    { date: "2026-06-24", team1: "Scotland",    s1: 0, s2: 3, team2: "Brazil",               stage: "Group" },
+    { date: "2026-06-24", team1: "Morocco",     s1: 4, s2: 2, team2: "Haiti",                stage: "Group" },
     { date: "2026-06-23", team1: "Portugal",  s1: 5, s2: 0, team2: "Uzbekistan", stage: "Group" },
     { date: "2026-06-23", team1: "Colombia",  s1: 1, s2: 0, team2: "DR Congo",   stage: "Group" },
     { date: "2026-06-23", team1: "England",   s1: 0, s2: 0, team2: "Ghana",      stage: "Group" },
