@@ -142,10 +142,10 @@
       </section>
 
       <section class="card">
-        <h2>📋 Teams nobody picked
+        <h2>📋 Up for grabs — teams nobody picked
           <button id="teamsToggle" class="toggle-btn">Show all</button></h2>
-        <p class="hint">The upside still on the board — office points (stage + handicap)
-          for teams no one drafted.</p>
+        <p class="hint">Still-alive teams no one drafted — the upside still on the board
+          (office points = stage + handicap).</p>
         <div id="allTeamsWrap" style="display:none">
           <div class="scrollbox">
             <table id="allTeams">
@@ -493,7 +493,7 @@ BUCKETS.forEach(b => b.teams.forEach(t => {
     pts: (STAGE_POINTS[res.stage] ?? 0) + b.h, picker: pickerByTeam[t] || null });
 }));
 teamRows.sort((a,b) => b.pts - a.pts || b.h - a.h || a.team.localeCompare(b.team));
-const availRows = teamRows.filter(r => !r.picker);
+const availRows = teamRows.filter(r => !r.picker && !r.res.out);  // unpicked AND still alive
 document.querySelector("#allTeams tbody").innerHTML = availRows.map((r,i) => {
   const gone = r.res.out;
   return `<tr class="${gone?'dead':''}">
