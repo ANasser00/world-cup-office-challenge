@@ -203,8 +203,14 @@
   </footer>
 </div>
 
-<script src="picks.js"></script>
-<script src="results.js"></script>
+<script>
+  /* Cache-bust data files so updates show without a hard refresh.
+     document.write keeps these synchronous + ordered before the app script. */
+  (function(){ var v = Date.now();
+    document.write('<scr' + 'ipt src="picks.js?v=' + v + '"><\/scr' + 'ipt>');
+    document.write('<scr' + 'ipt src="results.js?v=' + v + '"><\/scr' + 'ipt>');
+  })();
+</script>
 <script>
 /* ---------- fixed rules (from the challenge deck) ---------- */
 const STAGE_POINTS = { GROUP:0, R32:3, R16:6, QF:9, SF:13, FINAL:17, WINNER:22 };
