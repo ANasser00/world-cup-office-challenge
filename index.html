@@ -457,7 +457,7 @@ matchesEl.innerHTML = matches.length ? matches.map(m => {
       <span class="match-score">${m.s1}–${m.s2}</span>
       <span class="match-t ${w1?'lose':''}">${esc(m.team2)}${mark(m.team2)}</span>
     </span>
-    <span class="match-stage">${esc(m.stage||"")}</span>
+    <span class="match-stage">${esc(m.stage||"")}${m.note?" · "+esc(m.note):""}</span>
   </div>`;
 }).join("") : `<div class="empty">No matches added yet — add them in results.js.</div>`;
 
