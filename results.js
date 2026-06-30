@@ -48,11 +48,11 @@ window.RESULTS = {
     "Algeria":      { stage: "R32", out: false },
     "Qatar":        { stage: "GROUP", out: true },
     "Portugal":     { stage: "R32", out: false },
-    "Morocco":      { stage: "R32", out: false },
+    "Morocco":      { stage: "R16", out: false },
     "England":      { stage: "R32", out: false },
     "Iran":         { stage: "GROUP", out: true },
-    "Netherlands":  { stage: "R32", out: false },
-    "Brazil":       { stage: "R32", out: false },
+    "Netherlands":  { stage: "R32", out: true },
+    "Brazil":       { stage: "R16", out: false },
     "Australia":    { stage: "R32", out: false },
     "Saudi Arabia": { stage: "GROUP", out: true },
     "Croatia":      { stage: "R32", out: false },
@@ -60,18 +60,18 @@ window.RESULTS = {
     "Argentina":    { stage: "R32", out: false },
     "Scotland":     { stage: "GROUP", out: true },
     "Uruguay":      { stage: "GROUP", out: true },
-    "Germany":      { stage: "R32", out: false },
+    "Germany":      { stage: "R32", out: true },
     "Senegal":      { stage: "R32", out: false },
     "Austria":      { stage: "R32", out: false },
     // --- unpicked teams (tracked for the standings tables) ---
     "Norway":               { stage: "R32",   out: false },
-    "Japan":                { stage: "R32",   out: false },
+    "Japan":                { stage: "R32", out: true },
     "Colombia":             { stage: "R32",   out: false },
     "Switzerland":          { stage: "R32",   out: false },
     "Ecuador":              { stage: "R32",   out: false },
     "Mexico":               { stage: "R32",   out: false },
     "United States":        { stage: "R32",   out: false },
-    "Paraguay":             { stage: "R32",   out: false },
+    "Paraguay":             { stage: "R16", out: false },
     "Canada":               { stage: "R16", out: false },
     "Bosnia & Herzegovina": { stage: "R32",   out: false },
     "Cote d’Ivoire":        { stage: "R32",   out: false },
@@ -90,7 +90,7 @@ window.RESULTS = {
     "Curaçao":              { stage: "GROUP", out: true  },
     "Haiti":                { stage: "GROUP", out: true  },
   },
-  // Goals so far — as of ~2026-06-29 (sources: NBC / Goal.com). Refresh anytime
+  // Goals so far — as of ~2026-06-30 (sources: NBC / Goal.com). Refresh anytime
   // (ask Claude to "update the results"). Add ANY scorer, not just picked ones.
   topScorerGoals: {
     "Lionel Messi":      6,
@@ -103,9 +103,9 @@ window.RESULTS = {
     "Harry Kane":        3,
     "Matheus Cunha":     3,
     "Folarin Balogun":   2,
-    "Kai Havertz":       2,
+    "Kai Havertz":       3,
     "Mikel Oyarzabal":   2,
-    "Cody Gakpo":        2,
+    "Cody Gakpo":        3,
     "Cristiano Ronaldo": 2,
     "Alexander Isak":    1,
     "Michael Olise":     0,
@@ -114,6 +114,9 @@ window.RESULTS = {
 
   // Most recent results (newest first). { date, team1, s1, s2, team2, stage }
   recentMatches: [
+    { date: "2026-06-29", team1: "Brazil",      s1: 2, s2: 1, team2: "Japan",       stage: "Round of 32" },
+    { date: "2026-06-29", team1: "Germany",     s1: 1, s2: 1, team2: "Paraguay",    stage: "Round of 32", note: "Paraguay won on pens" },
+    { date: "2026-06-29", team1: "Netherlands", s1: 1, s2: 1, team2: "Morocco",     stage: "Round of 32", note: "Morocco won 3-2 on pens" },
     { date: "2026-06-28", team1: "South Africa", s1: 0, s2: 1, team2: "Canada",      stage: "Round of 32" },
     { date: "2026-06-27", team1: "Argentina",  s1: 3, s2: 1, team2: "Jordan",        stage: "Group" },
     { date: "2026-06-27", team1: "Austria",    s1: 3, s2: 3, team2: "Algeria",       stage: "Group" },
