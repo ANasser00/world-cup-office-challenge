@@ -159,4 +159,19 @@ window.RESULTS = {
     { date: "2026-06-17", team1: "Colombia",  s1: 3, s2: 1, team2: "Uzbekistan", stage: "Group" },
   ],
 
+  // Upcoming fixtures — kickoff times in UTC ("...Z"). The page renders them in
+  // each viewer's LOCAL timezone with a live countdown. Add/remove as rounds firm up;
+  // once a fixture is played, delete it here and add the score to recentMatches above.
+  fixtures: [
+    { utc: "2026-07-01T16:00:00Z", team1: "England",       team2: "DR Congo",             stage: "Round of 32" },
+    { utc: "2026-07-01T20:00:00Z", team1: "Belgium",       team2: "Senegal",              stage: "Round of 32" },
+    { utc: "2026-07-02T00:00:00Z", team1: "United States", team2: "Bosnia & Herzegovina",  stage: "Round of 32" },
+    { utc: "2026-07-02T19:00:00Z", team1: "Spain",         team2: "Austria",              stage: "Round of 32" },
+    { utc: "2026-07-02T23:00:00Z", team1: "Portugal",      team2: "Croatia",              stage: "Round of 32" },
+    { utc: "2026-07-03T03:00:00Z", team1: "Switzerland",   team2: "Algeria",              stage: "Round of 32" },
+    { utc: "2026-07-03T18:00:00Z", team1: "Australia",     team2: "Egypt",                stage: "Round of 32" },
+    { utc: "2026-07-03T22:00:00Z", team1: "Argentina",     team2: "Cabo Verde",           stage: "Round of 32" },
+    { utc: "2026-07-04T01:30:00Z", team1: "Colombia",      team2: "Ghana",                stage: "Round of 32" },
+  ],
+
 };
