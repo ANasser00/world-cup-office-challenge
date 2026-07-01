@@ -81,6 +81,16 @@
   .match-score{font-weight:800;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 9px}
   .match-stage{color:var(--muted);font-size:11px;margin-left:auto}
   .pickmark{color:var(--gold)}
+  .fx-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+  .fx-row:first-child{border-top:none}
+  .fx-when{min-width:78px;line-height:1.15}
+  .fx-day{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+  .fx-time{display:block;font-weight:700;font-size:13px}
+  .fx-teams{flex:1;font-size:13.5px;font-weight:600}
+  .fx-v{color:var(--muted);font-weight:400;margin:0 3px}
+  .fx-owner{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+  .fx-rel{font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap;text-align:right}
+  .fx-rel.live{color:var(--red)}
   .toggle-btn{float:right;font-size:11px;font-weight:700;text-transform:none;letter-spacing:0;
     background:var(--panel2);border:1px solid var(--line);color:var(--ink);
     border-radius:6px;padding:4px 11px;cursor:pointer}
@@ -134,6 +144,12 @@
           high-handicap team goes, the more its points stack.</p>
         <div id="horses"></div>
       </aside>
+
+      <section class="card">
+        <h2>⏱️ Upcoming matches</h2>
+        <p class="hint">Kickoffs in your local time. ⭐ marks a picked team.</p>
+        <div id="fixtures"></div>
+      </section>
 
       <section class="card">
         <h2>🗓️ Latest matches</h2>
@@ -486,6 +502,46 @@ if (scorers.length){
 /* ---------- every team's value (collapsible) ---------- */
 const pickerByTeam = {};
 PICKS.forEach(p => { pickerByTeam[p.team] = p.name; });
+
+/* ---------- upcoming fixtures (local time + live countdown) ---------- */
+const FIXTURES = (RESULTS.fixtures || []).slice()
+  .sort((a,b) => new Date(a.utc) - new Date(b.utc));
+function fxKick(utc){
+  const d = new Date(utc), now = new Date();
+  const time = d.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+  const today = d.toDateString() === now.toDateString();
+  const tmrw = new Date(now.getTime()+86400000).toDateString() === d.toDateString();
+  const day = today ? "Today" : tmrw ? "Tomorrow"
+    : d.toLocaleDateString([], {weekday:"short", month:"short", day:"numeric"});
+  return { day, time, d };
+}
+function fxRel(d){
+  const ms = d - new Date();
+  if (ms <= -2.5*3600e3) return { hide:true };
+  if (ms <= 0) return { txt:"LIVE", live:true };
+  const h = Math.floor(ms/3600e3), m = Math.floor((ms%3600e3)/60000);
+  return { txt: h>0 ? ("in "+h+"h "+m+"m") : ("in "+m+"m") };
+}
+function renderFixtures(){
+  const el = document.getElementById("fixtures");
+  if (!el) return;
+  const rows = FIXTURES.map(f => { const k = fxKick(f.utc); return { f, k, r: fxRel(k.d) }; })
+    .filter(x => !x.r.hide).slice(0,6);
+  if (!rows.length){ el.innerHTML = '<div class="empty">No upcoming matches scheduled.</div>'; return; }
+  const mark = t => pickedTeams.has(t) ? ' <span class="pickmark">⭐</span>' : "";
+  el.innerHTML = rows.map(({f,k,r}) => {
+    const owners = [f.team1,f.team2].filter(t => pickerByTeam[t]).map(t => pickerByTeam[t]);
+    return '<div class="fx-row">'
+      + '<div class="fx-when"><span class="fx-day">'+esc(k.day)+'</span><span class="fx-time">'+esc(k.time)+'</span></div>'
+      + '<div class="fx-teams">'+esc(f.team1)+mark(f.team1)+'<span class="fx-v">v</span>'+esc(f.team2)+mark(f.team2)
+      + (owners.length ? '<span class="fx-owner">'+esc(owners.join(" · "))+'</span>' : '')
+      + '</div>'
+      + '<div class="fx-rel '+(r.live?'live':'')+'">'+esc(r.txt||"")+'</div>'
+      + '</div>';
+  }).join("");
+}
+renderFixtures();
+setInterval(renderFixtures, 60000);
 const teamRows = [];
 BUCKETS.forEach(b => b.teams.forEach(t => {
   const res = teamResult(t);
