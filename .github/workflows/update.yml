@@ -3,7 +3,7 @@ name: Update results
 # Auto-refreshes results.js from football-data.org.
 on:
   schedule:
-    - cron: "17 * * * *"      # hourly, at :17 past
+    - cron: "17 */12 * * *"   # every 12h (00:17 & 12:17 UTC)
   workflow_dispatch: {}        # manual "Run workflow" button
 
 permissions:
