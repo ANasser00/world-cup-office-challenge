@@ -30,4 +30,5 @@ window.PICKS = [
   { name: "Salman",    team: "Germany",      scorer: "Alexander Isak" },
   { name: "Alghayesh", team: "Senegal",      scorer: "Julián Álvarez" },
   { name: "Hannan",    team: "Austria",      scorer: "Kylian Mbappé" },
+  { name: "Fahad",     team: "Cabo Verde",   scorer: "Ousmane Dembélé" },
 ];
